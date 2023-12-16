@@ -253,6 +253,52 @@ class RawDataset(Dataset):
         return (img, self.image_path_list[index])
 
 
+class CustomDataset(Dataset):
+
+    def __init__(self, root, opt):
+        self.opt = opt
+
+        self.image_path_list = []
+        self.labels_dict = {}
+
+        for dirpath, dirnames, filenames in os.walk(root):
+            for name in filenames:
+                _, ext = os.path.splitext(name)
+                ext = ext.lower()
+                if ext == '.jpg' or ext == '.jpeg' or ext == '.png':
+                    self.image_path_list.append(f'{dirpath}/{name}')
+
+        self.image_path_list = natsorted(self.image_path_list)
+        self.nSamples = len(self.image_path_list)
+
+        # Creating labels dict
+        label_path = os.path.join(root, f'{os.path.split(root)[-1]}.txt')
+        with open(label_path, 'r') as file:
+            rows = file.readlines()
+        for row in rows:
+            row = row.split('\t')
+            self.labels_dict[row[0]] = row[1].strip()
+
+
+    def __len__(self):
+        return self.nSamples
+
+    def __getitem__(self, index):
+
+        try:
+            if self.opt.rgb:
+                img = Image.open(self.image_path_list[index]).convert('RGB')  # for color image
+            else:
+                img = Image.open(self.image_path_list[index]).convert('L')
+
+                label = self.labels_dict['/'.join(self.image_path_list[index].split('/')[1:])]
+                label = label.lower()
+
+        except IOError:
+            print(f'Corrupted image for {index}')
+        return (img, label)
+
+
 class ResizeNormalize(object):
 
     def __init__(self, size, interpolation=Image.BICUBIC):
