@@ -291,7 +291,8 @@ class CustomDataset(Dataset):
             else:
                 img = Image.open(self.image_path_list[index]).convert('L')
 
-                label = self.labels_dict['/'.join(self.image_path_list[index].split('/')[1:])]
+                # label = self.labels_dict['/'.join(self.image_path_list[index].split('/')[1:])]
+                label = self.labels_dict['/'.join(self.image_path_list[index].split('/')[-2:])]
                 label = label.lower()
 
         except IOError:

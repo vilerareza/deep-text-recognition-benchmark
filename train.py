@@ -167,7 +167,7 @@ def train(opt):
 
     # while(True):
 
-    for epoch in range(20):
+    for epoch in range(50):
         # train part
 
         print (f'Epoch: {epoch}')
