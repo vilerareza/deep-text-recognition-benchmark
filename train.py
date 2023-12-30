@@ -99,14 +99,18 @@ def train(opt):
             continue
 
     # data parallel for multi-GPU
-    model = torch.nn.DataParallel(model).to(device)
+    # model = torch.nn.DataParallel(model).to(device)
     model.train()
     if opt.saved_model != '':
         print(f'loading pretrained model from {opt.saved_model}')
         if opt.FT:
+            print ('ft')
             model.load_state_dict(torch.load(opt.saved_model, map_location=device), strict=False)
         else:
+            print ('no ft')
             model.load_state_dict(torch.load(opt.saved_model, map_location=device))
+
+    model = torch.nn.DataParallel(model).to(device)
     print("Model:")
     print(model)
 
