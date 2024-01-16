@@ -267,7 +267,7 @@ def train(opt):
                     
                     train_losses.append(loss_avg.val())
                     validation_losses.append(valid_loss.detach().cpu().numpy())
-                    accuracies.append(current_accuracy.detach().cpu().numpy()))
+                    accuracies.append(current_accuracy)
                     iterations.append(iteration)
 
             # save model per 1e+5 iter.
