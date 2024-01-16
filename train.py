@@ -24,6 +24,8 @@ from model import Model
 from test import validation
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
+from matplotlib import pyplot as plt
+
 
 def train(opt):
     """ dataset preparation """
@@ -171,7 +173,15 @@ def train(opt):
 
     # while(True):
 
-    for epoch in range(50):
+    train_losses = []
+    validation_losses = []
+    accuracies = []
+    iterations = []
+    
+
+    nEpoch = 50
+
+    for epoch in range(nEpoch):
         # train part
 
         print (f'Epoch: {epoch}')
@@ -228,6 +238,11 @@ def train(opt):
 
                     current_model_log = f'{"Current_accuracy":17s}: {current_accuracy:0.3f}, {"Current_norm_ED":17s}: {current_norm_ED:0.2f}'
 
+                    train_losses.append(loss_avg.val())
+                    validation_losses.append(valid_loss)
+                    accuracies.append(current_accuracy)
+                    iterations.append(iteration)
+
                     # keep best accuracy model (on valid dataset)
                     if current_accuracy > best_accuracy:
                         best_accuracy = current_accuracy
@@ -264,6 +279,27 @@ def train(opt):
                 print('end the training')
                 sys.exit()
             iteration += 1
+
+    ''' Plotting '''
+    # Accuracy
+    plt.plot(accuracies)
+    plt.xlabel('Step')
+    plt.ylabel('Accuracy')
+    plt.grid(True)
+    plt.savefig('accuracy_plot.png')
+    # Train loss
+    plt.plot(train_losses)
+    plt.xlabel('Step')
+    plt.ylabel('Train Loss')
+    plt.grid(True)
+    plt.savefig('train_loss_plot.png')
+    # Validation loss
+    plt.plot(validation_losses)
+    plt.xlabel('Step')
+    plt.ylabel('Val Loss')
+    plt.grid(True)
+    plt.savefig('val_loss_plot.png')
+
 
 
 if __name__ == '__main__':
