@@ -238,11 +238,6 @@ def train(opt):
 
                     current_model_log = f'{"Current_accuracy":17s}: {current_accuracy:0.3f}, {"Current_norm_ED":17s}: {current_norm_ED:0.2f}'
 
-                    train_losses.append(loss_avg.val())
-                    validation_losses.append(valid_loss)
-                    accuracies.append(current_accuracy)
-                    iterations.append(iteration)
-
                     # keep best accuracy model (on valid dataset)
                     if current_accuracy > best_accuracy:
                         best_accuracy = current_accuracy
@@ -269,6 +264,11 @@ def train(opt):
                     predicted_result_log += f'{dashed_line}'
                     print(predicted_result_log)
                     log.write(predicted_result_log + '\n')
+                    
+                    train_losses.append(loss_avg.val())
+                    validation_losses.append(valid_loss.detach().cpu().numpy())
+                    accuracies.append(current_accuracy.detach().cpu().numpy()))
+                    iterations.append(iteration)
 
             # save model per 1e+5 iter.
             if (iteration + 1) % 1e+5 == 0:
