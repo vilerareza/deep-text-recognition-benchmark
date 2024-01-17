@@ -220,7 +220,7 @@ def train(opt):
             optimizer.step()
 
             loss_avg.add(cost)
-            train_losses.append(loss_avg.val())
+            train_losses.append(loss_avg.val().detach().cpu().numpy())
 
             # validation part
             if (iteration + 1) % opt.valInterval == 0 or iteration == 0: # To see training progress, we also conduct validation when 'iteration == 0' 
