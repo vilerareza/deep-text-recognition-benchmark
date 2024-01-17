@@ -287,18 +287,21 @@ def train(opt):
     plt.ylabel('Accuracy')
     plt.grid(True)
     plt.savefig('accuracy_plot.png')
+    plt.cla()
     # Train loss
     plt.plot(train_losses)
     plt.xlabel('Step')
     plt.ylabel('Train Loss')
     plt.grid(True)
     plt.savefig('train_loss_plot.png')
+    plt.cla()
     # Validation loss
     plt.plot(validation_losses)
     plt.xlabel('Step')
     plt.ylabel('Val Loss')
     plt.grid(True)
     plt.savefig('val_loss_plot.png')
+    plt.cla()
 
 
 
